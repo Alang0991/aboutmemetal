@@ -1,0 +1,290 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metal's About Me</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#0f172a,#111827,#1e3a8a);
+    color:white;
+}
+
+.lock-screen{
+    position:fixed;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#000;
+    z-index:1000;
+}
+
+.lock-box{
+    width:min(90%,400px);
+    padding:30px;
+    border-radius:20px;
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(10px);
+    text-align:center;
+    border:1px solid rgba(255,255,255,0.1);
+}
+
+.lock-box h1{
+    margin-bottom:15px;
+    color:#4cc9ff;
+}
+
+.lock-box input{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    margin-top:10px;
+    font-size:1rem;
+}
+
+.lock-box button{
+    margin-top:15px;
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    background:#4cc9ff;
+    color:black;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.error{
+    color:#ff6b6b;
+    margin-top:10px;
+}
+
+.hidden{
+    display:none;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+    padding:30px;
+}
+
+.hero{
+    text-align:center;
+    padding:60px 20px;
+}
+
+.hero h1{
+    font-size:clamp(2.5rem,8vw,5rem);
+    color:#4cc9ff;
+}
+
+.hero p{
+    margin-top:10px;
+    opacity:.85;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:20px;
+    padding:20px;
+    backdrop-filter:blur(10px);
+}
+
+.card h2{
+    color:#4cc9ff;
+    margin-bottom:15px;
+}
+
+.card ul{
+    padding-left:20px;
+}
+
+.card li{
+    margin-bottom:8px;
+}
+
+footer{
+    text-align:center;
+    padding:40px;
+    opacity:.7;
+}
+</style>
+</head>
+<body>
+
+<div class="lock-screen" id="lockScreen">
+    <div class="lock-box">
+        <h1>💙 Private Page</h1>
+        <p>Enter the password to continue.</p>
+
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="unlockPage()">Unlock</button>
+
+        <div class="error" id="error"></div>
+    </div>
+</div>
+
+<div class="container hidden" id="content">
+
+    <section class="hero">
+        <h1>Metal</h1>
+        <p>A big huggable bear looking for love, honesty, affection, and connection.</p>
+    </section>
+
+    <div class="grid">
+
+        <div class="card">
+            <h2>💙 What I Can Offer</h2>
+            <ul>
+                <li>Unending love</li>
+                <li>Texts every day and calls weekly</li>
+                <li>Support whenever you need it</li>
+                <li>Cute couple art and surprises</li>
+                <li>Help whenever I can</li>
+                <li>Hugs, kisses, cuddles, and affection</li>
+                <li>Fun conversations and random topics</li>
+                <li>Free art :0</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>✨ About Me</h2>
+            <ul>
+                <li>Favorite color: Electric Blue</li>
+                <li>Fun, honest, and affectionate</li>
+                <li>Enjoys studying, reading, writing, and singing</li>
+                <li>Loves gaming</li>
+                <li>Enjoys cuddling and quality time together</li>
+                <li>Likes comfortable silence with someone special</li>
+                <li>Loves crystals, gemstones, and tarot</li>
+                <li>Enjoys horror, psychological stories, and gothic aesthetics</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🚫 Don't</h2>
+            <ul>
+                <li>Don't lie to me</li>
+                <li>Don't use me</li>
+                <li>Don't leave without saying goodbye</li>
+                <li>Don't ignore me on purpose</li>
+                <li>Don't compare me to other relationships</li>
+                <li>Don't guilt-trip me</li>
+                <li>Don't act like you own me</li>
+                <li>Don't hide things from me</li>
+                <li>Don't be mean</li>
+                <li>Be honest, even if you messed up</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>😨 Fears</h2>
+            <ul>
+                <li>Being alone</li>
+                <li>The dark</li>
+                <li>Sleeping alone</li>
+                <li>Empty places</li>
+                <li>Loud or chaotic environments</li>
+                <li>Large crowds</li>
+                <li>Being unclean</li>
+                <li>Losing someone I love</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🧠 Mental State</h2>
+            <ul>
+                <li>I deal with a lot mentally and emotionally.</li>
+                <li>Trauma has affected parts of my life.</li>
+                <li>Honesty means everything to me.</li>
+                <li>I sometimes withdraw socially.</li>
+                <li>I have ADHD.</li>
+                <li>I am autistic and experience social difficulties.</li>
+                <li>I always try my best for the people I care about.</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🐻 Nicknames</h2>
+            <ul>
+                <li>Best Boy</li>
+                <li>Love</li>
+                <li>Honey</li>
+                <li>Sweetie</li>
+                <li>Cutie Pie</li>
+                <li>Prince</li>
+                <li>Bear</li>
+                <li>Pup / Puppy</li>
+                <li>Metal</li>
+                <li>Mero</li>
+                <li>Pillow</li>
+                <li>Heavy Blanket</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>❌ Turn Offs</h2>
+            <ul>
+                <li>Dishonesty</li>
+                <li>Lack of consent</li>
+                <li>Actually hurting someone</li>
+                <li>Being treated badly</li>
+                <li>Forced feelings</li>
+                <li>Being rushed</li>
+                <li>Being shared with others</li>
+                <li>Constant hostility or cruelty</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <footer>
+        Made with 💙 by Metal
+    </footer>
+
+</div>
+
+<script>
+const PASSWORD = "iloveyoumore";
+
+function unlockPage() {
+    const input = document.getElementById("password").value;
+
+    if(input === PASSWORD){
+        document.getElementById("lockScreen").style.display = "none";
+        document.getElementById("content").classList.remove("hidden");
+    } else {
+        document.getElementById("error").textContent = "Wrong password.";
+    }
+}
+
+document.getElementById("password").addEventListener("keypress", function(e){
+    if(e.key === "Enter"){
+        unlockPage();
+    }
+});
+</script>
+
+</body>
+</html>
+```
