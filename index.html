@@ -7,29 +7,36 @@
 
 <style>
 :root{
-  --bg:#030712;
-  --panel:#0f1a2b;
-  --glass:rgba(255,255,255,.08);
-  --line:rgba(255,255,255,.14);
-  --blue:#38d5ff;
-  --blue2:#2563eb;
-  --purple:#8b5cf6;
-  --text:#f8fbff;
-  --muted:#b8c7d9;
+  --bg:#02040a;
+  --card:rgba(255,255,255,.08);
+  --line:rgba(255,255,255,.16);
+  --text:#f5fbff;
+  --muted:#b7c9d8;
+  --blue:#39c8ff;
+  --blue2:#0077ff;
+  --purple:#9b5cff;
+  --pink:#ff4fd8;
 }
 
-*{margin:0;padding:0;box-sizing:border-box}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-html{scroll-behavior:smooth}
+html{
+  scroll-behavior:smooth;
+}
 
 body{
   min-height:100vh;
-  font-family:"Segoe UI",system-ui,sans-serif;
+  font-family:Inter,Segoe UI,system-ui,sans-serif;
   color:var(--text);
   background:
-    radial-gradient(circle at top left,rgba(56,213,255,.38),transparent 32%),
-    radial-gradient(circle at top right,rgba(139,92,246,.28),transparent 30%),
-    linear-gradient(135deg,#020617,#07111f 45%,#020617);
+    radial-gradient(circle at 15% 10%, rgba(57,200,255,.35), transparent 32%),
+    radial-gradient(circle at 90% 20%, rgba(155,92,255,.25), transparent 34%),
+    radial-gradient(circle at 50% 100%, rgba(0,119,255,.22), transparent 36%),
+    linear-gradient(145deg,#02040a,#07111f 45%,#02040a);
   overflow-x:hidden;
 }
 
@@ -37,15 +44,73 @@ body::before{
   content:"";
   position:fixed;
   inset:0;
-  background:
-    linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
-  background-size:44px 44px;
+  background-image:
+    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+  background-size:42px 42px;
+  mask-image:linear-gradient(to bottom, black, transparent);
   pointer-events:none;
-  opacity:.55;
+  z-index:-3;
 }
 
-.hidden{display:none}
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:radial-gradient(white 1px, transparent 1px);
+  background-size:80px 80px;
+  opacity:.12;
+  animation:starsMove 35s linear infinite;
+  pointer-events:none;
+  z-index:-2;
+}
+
+@keyframes starsMove{
+  from{transform:translateY(0)}
+  to{transform:translateY(80px)}
+}
+
+.orb{
+  position:fixed;
+  width:280px;
+  height:280px;
+  border-radius:50%;
+  background:rgba(57,200,255,.18);
+  filter:blur(45px);
+  animation:float 7s ease-in-out infinite alternate;
+  pointer-events:none;
+  z-index:-1;
+}
+
+.orb.one{
+  top:10%;
+  left:-90px;
+}
+
+.orb.two{
+  right:-100px;
+  bottom:8%;
+  background:rgba(155,92,255,.2);
+  animation-delay:1s;
+}
+
+.orb.three{
+  left:35%;
+  bottom:-150px;
+  background:rgba(0,119,255,.16);
+  animation-delay:2s;
+}
+
+@keyframes float{
+  from{transform:translateY(0) scale(1)}
+  to{transform:translateY(-35px) scale(1.08)}
+}
+
+.hidden{
+  display:none;
+}
+
+/* PASSWORD SCREEN */
 
 .lock{
   position:fixed;
@@ -53,41 +118,67 @@ body::before{
   z-index:100;
   display:grid;
   place-items:center;
-  padding:20px;
-  background:rgba(2,6,23,.96);
-  backdrop-filter:blur(18px);
+  padding:22px;
+  background:rgba(2,4,10,.94);
+  backdrop-filter:blur(22px);
 }
 
 .lock-box{
   width:min(430px,100%);
-  padding:34px;
+  padding:36px;
+  border-radius:34px;
   text-align:center;
-  border-radius:32px;
-  background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.04));
+  background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.045));
   border:1px solid var(--line);
-  box-shadow:0 0 70px rgba(56,213,255,.3);
+  box-shadow:
+    0 0 70px rgba(57,200,255,.3),
+    inset 0 1px 0 rgba(255,255,255,.12);
+}
+
+.lock-icon{
+  width:80px;
+  height:80px;
+  margin:0 auto 18px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:2.8rem;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  box-shadow:0 0 35px rgba(57,200,255,.45);
+  animation:pulse 4s infinite ease-in-out;
+}
+
+@keyframes pulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.08)}
 }
 
 .lock-box h1{
+  font-size:2.1rem;
   color:var(--blue);
-  font-size:2.2rem;
-  margin-bottom:10px;
+  text-shadow:0 0 20px rgba(57,200,255,.6);
 }
 
 .lock-box p{
   color:var(--muted);
-  margin-bottom:22px;
+  margin:12px 0 22px;
+  line-height:1.6;
 }
 
 input{
   width:100%;
-  padding:15px;
-  border-radius:16px;
+  padding:15px 16px;
+  border-radius:18px;
   border:1px solid var(--line);
   background:rgba(0,0,0,.35);
   color:white;
-  font-size:1rem;
   outline:none;
+  font-size:1rem;
+}
+
+input:focus{
+  border-color:rgba(57,200,255,.65);
+  box-shadow:0 0 0 4px rgba(57,200,255,.12);
 }
 
 button{
@@ -95,277 +186,405 @@ button{
   margin-top:14px;
   padding:15px;
   border:0;
-  border-radius:16px;
-  cursor:pointer;
+  border-radius:18px;
   font-weight:900;
-  color:#00111f;
+  cursor:pointer;
+  color:#00111d;
   background:linear-gradient(135deg,var(--blue),var(--blue2));
-  box-shadow:0 0 28px rgba(56,213,255,.35);
+  box-shadow:0 0 25px rgba(57,200,255,.32);
+  transition:.25s ease;
+}
+
+button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 38px rgba(57,200,255,.5);
 }
 
 .error{
-  color:#ff7aa7;
   margin-top:12px;
+  color:#ff7aa7;
   min-height:22px;
 }
 
-.page{
-  width:min(1200px,100%);
+/* MAIN PAGE */
+
+.wrapper{
+  width:min(1180px,100%);
   margin:auto;
-  padding:22px;
+  padding:24px;
 }
 
 .hero{
-  min-height:88vh;
+  min-height:100vh;
   display:grid;
-  grid-template-columns:1.2fr .8fr;
+  grid-template-columns:1.1fr .9fr;
   align-items:center;
-  gap:24px;
+  gap:28px;
+  padding:30px 0;
 }
 
-.hero-main,
-.profile,
+.hero-card,
+.profile-card,
 .card{
-  background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.045));
   border:1px solid var(--line);
-  box-shadow:0 25px 70px rgba(0,0,0,.32);
+  background:linear-gradient(145deg,rgba(255,255,255,.105),rgba(255,255,255,.045));
   backdrop-filter:blur(18px);
+  box-shadow:0 25px 70px rgba(0,0,0,.3);
 }
 
-.hero-main{
+.hero-card{
   padding:46px;
-  border-radius:38px;
+  border-radius:40px;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-card::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  background:
+    radial-gradient(circle at top left,rgba(57,200,255,.22),transparent 35%),
+    radial-gradient(circle at bottom right,rgba(155,92,255,.18),transparent 40%);
+  pointer-events:none;
+}
+
+.hero-card > *{
+  position:relative;
+  z-index:1;
 }
 
 .badge{
-  display:inline-flex;
+  width:max-content;
+  max-width:100%;
   padding:9px 15px;
-  margin-bottom:20px;
+  margin-bottom:18px;
   border-radius:999px;
+  background:rgba(57,200,255,.13);
+  border:1px solid rgba(57,200,255,.34);
   color:var(--blue);
-  background:rgba(56,213,255,.13);
-  border:1px solid rgba(56,213,255,.32);
   font-weight:800;
+  font-size:.9rem;
 }
 
 h1{
-  font-size:clamp(3.7rem,10vw,8rem);
-  line-height:.86;
-  letter-spacing:-5px;
+  font-size:clamp(4rem,12vw,9rem);
+  line-height:.85;
   color:var(--blue);
-  text-shadow:0 0 35px rgba(56,213,255,.65);
+  letter-spacing:-5px;
+  text-shadow:0 0 38px rgba(57,200,255,.62);
 }
 
-.hero-main p{
+.hero-card p{
   margin-top:24px;
   color:var(--muted);
   font-size:1.15rem;
   line-height:1.75;
-  max-width:680px;
 }
 
-.hero-links{
+.hero-buttons{
   display:flex;
   gap:12px;
   flex-wrap:wrap;
   margin-top:30px;
 }
 
-.hero-links a{
+.hero-buttons a{
   text-decoration:none;
   color:white;
   padding:13px 18px;
   border-radius:999px;
   background:rgba(255,255,255,.09);
   border:1px solid var(--line);
+  transition:.25s ease;
 }
 
-.hero-links a:first-child{
+.hero-buttons a:hover{
+  transform:translateY(-2px);
+  background:rgba(57,200,255,.16);
+  color:var(--blue);
+}
+
+.hero-buttons a:first-child{
+  color:#00111d;
   background:linear-gradient(135deg,var(--blue),var(--blue2));
-  color:#00111f;
   font-weight:900;
 }
 
-.profile{
-  padding:30px;
-  border-radius:38px;
+.profile-card{
+  padding:28px;
+  border-radius:40px;
   text-align:center;
-}
-
-.avatar{
-  width:165px;
-  height:165px;
-  margin:0 auto 20px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  font-size:4.3rem;
-  background:linear-gradient(135deg,var(--blue),var(--purple));
-  box-shadow:0 0 55px rgba(56,213,255,.45);
-}
-
-.profile h2{
-  color:var(--blue);
-  font-size:2rem;
-}
-
-.profile p{
-  color:var(--muted);
-  margin-top:10px;
-  line-height:1.65;
-}
-
-.pills{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:10px;
-  margin-top:22px;
-}
-
-.pills span{
-  padding:9px 12px;
-  border-radius:999px;
-  background:rgba(255,255,255,.09);
-  border:1px solid var(--line);
-  font-size:.9rem;
-}
-
-.nav{
-  display:flex;
-  gap:10px;
-  overflow-x:auto;
-  padding:10px 0 28px;
-}
-
-.nav a{
-  flex:0 0 auto;
-  text-decoration:none;
-  color:white;
-  padding:10px 15px;
-  border-radius:999px;
-  background:rgba(255,255,255,.09);
-  border:1px solid var(--line);
-}
-
-.nav a:hover{
-  color:var(--blue);
-  background:rgba(56,213,255,.15);
-}
-
-.section-title{
-  margin:38px 0 18px;
-  font-size:2rem;
-  color:var(--blue);
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(12,1fr);
-  gap:18px;
-}
-
-.card{
-  grid-column:span 6;
-  border-radius:30px;
-  padding:26px;
   position:relative;
   overflow:hidden;
 }
 
-.card::before{
+.profile-card::before{
   content:"";
   position:absolute;
   inset:0;
-  background:linear-gradient(135deg,rgba(56,213,255,.14),transparent 45%);
+  background:
+    radial-gradient(circle at top,rgba(57,200,255,.18),transparent 45%),
+    linear-gradient(180deg,rgba(255,255,255,.04),transparent);
   pointer-events:none;
 }
 
-.card.wide{grid-column:span 12}
-.card.third{grid-column:span 4}
+.profile-card > *{
+  position:relative;
+  z-index:1;
+}
+
+.avatar{
+  width:180px;
+  height:180px;
+  margin:0 auto 22px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:4.6rem;
+  background:
+    radial-gradient(circle,rgba(255,255,255,.26),transparent 55%),
+    linear-gradient(135deg,var(--blue),var(--purple));
+  box-shadow:0 0 55px rgba(57,200,255,.55);
+  animation:pulse 4s infinite ease-in-out;
+}
+
+.profile-card h2{
+  color:var(--blue);
+  font-size:2rem;
+  text-shadow:0 0 15px rgba(57,200,255,.45);
+}
+
+.profile-card p{
+  color:var(--muted);
+  margin-top:10px;
+  line-height:1.7;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:24px;
+}
+
+.stat{
+  padding:14px 8px;
+  border-radius:18px;
+  background:rgba(255,255,255,.07);
+  border:1px solid var(--line);
+}
+
+.stat strong{
+  display:block;
+  color:var(--blue);
+  margin-bottom:4px;
+}
+
+/* NAV */
+
+.nav{
+  position:relative;
+  z-index:10;
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:0 0 30px;
+  padding:12px;
+  border-radius:26px;
+  background:rgba(3,7,19,.62);
+  border:1px solid var(--line);
+  backdrop-filter:blur(18px);
+}
+
+.nav a{
+  white-space:nowrap;
+  color:white;
+  text-decoration:none;
+  padding:10px 14px;
+  border-radius:999px;
+  background:rgba(255,255,255,.07);
+  transition:.25s ease;
+}
+
+.nav a:hover{
+  color:var(--blue);
+  background:rgba(57,200,255,.16);
+  transform:translateY(-2px);
+}
+
+/* CARDS */
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  gap:20px;
+}
+
+.card{
+  grid-column:span 6;
+  border-radius:34px;
+  padding:30px;
+  position:relative;
+  overflow:hidden;
+  transition:.35s ease;
+  border:1px solid rgba(57,200,255,.16);
+}
+
+.card.wide{
+  grid-column:span 12;
+}
+
+.card.small{
+  grid-column:span 4;
+}
+
+.card:hover{
+  transform:translateY(-8px);
+  border-color:rgba(57,200,255,.48);
+  box-shadow:
+    0 25px 60px rgba(0,0,0,.38),
+    0 0 34px rgba(57,200,255,.18);
+}
+
+.card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at top left,rgba(57,200,255,.16),transparent 40%),
+    linear-gradient(135deg,rgba(57,200,255,.08),transparent 45%);
+  pointer-events:none;
+}
+
+.card > *{
+  position:relative;
+  z-index:1;
+}
 
 .card h2{
-  position:relative;
   color:var(--blue);
-  margin-bottom:15px;
-  font-size:1.5rem;
+  margin-bottom:16px;
+  font-size:1.6rem;
+  text-shadow:0 0 15px rgba(57,200,255,.5);
+}
+
+.card p,
+.card li{
+  color:#dceeff;
+  line-height:1.6;
 }
 
 ul{
-  position:relative;
   padding-left:20px;
 }
 
 li{
   margin-bottom:10px;
-  line-height:1.55;
-  color:#ecf7ff;
 }
 
 .quote{
+  font-size:clamp(1.45rem,3vw,2.15rem);
   text-align:center;
-  font-size:clamp(1.4rem,3vw,2.1rem);
   font-weight:900;
-  line-height:1.35;
+  color:white!important;
+  line-height:1.4;
 }
 
 footer{
-  padding:50px 20px;
   text-align:center;
+  padding:50px 20px;
   color:var(--muted);
 }
 
-@media(max-width:900px){
-  .page{padding:16px}
-  .hero{
-    min-height:auto;
-    grid-template-columns:1fr;
-    padding-top:18px;
+/* MOBILE */
+
+@media(max-width:850px){
+  .wrapper{
+    padding:16px;
   }
 
-  .hero-main{
+  .hero{
+    min-height:auto;
+    padding:28px 0;
+    grid-template-columns:1fr;
+  }
+
+  .hero-card{
     padding:32px 24px;
-    border-radius:30px;
+    border-radius:32px;
   }
 
   h1{
     letter-spacing:-3px;
   }
 
-  .profile{
-    border-radius:30px;
+  .profile-card{
+    border-radius:32px;
   }
 
   .card,
-  .card.third,
+  .card.small,
   .card.wide{
     grid-column:span 12;
   }
-}
 
-@media(max-width:520px){
-  .hero-main{
-    padding:28px 20px;
+  .stats{
+    grid-template-columns:1fr;
   }
 
-  .hero-links a{
+  .nav{
+    justify-content:flex-start;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    padding:10px;
+  }
+}
+
+@media(max-width:700px){
+  .hero-card{
+    text-align:center;
+  }
+
+  .badge{
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .hero-buttons{
+    justify-content:center;
+  }
+
+  .hero-buttons a{
     width:100%;
     text-align:center;
   }
 
+  .card{
+    padding:24px;
+  }
+}
+
+@media(max-width:480px){
+  .lock-box{
+    padding:26px 20px;
+    border-radius:26px;
+  }
+
   .avatar{
-    width:130px;
-    height:130px;
-    font-size:3.3rem;
+    width:135px;
+    height:135px;
+    font-size:3.4rem;
+  }
+
+  h1{
+    font-size:clamp(3.3rem,18vw,5.5rem);
   }
 
   .card{
     padding:22px;
-    border-radius:24px;
-  }
-
-  .section-title{
-    font-size:1.55rem;
+    border-radius:26px;
   }
 }
 </style>
@@ -373,45 +592,57 @@ footer{
 
 <body>
 
+<div class="orb one"></div>
+<div class="orb two"></div>
+<div class="orb three"></div>
+
 <div class="lock" id="lock">
   <div class="lock-box">
-    <h1>💙 Private Page</h1>
-    <p>Enter the password to unlock Metal's page.</p>
-    <input id="password" type="password" placeholder="Password" autocomplete="off">
+    <div class="lock-icon">💙</div>
+    <h1>Private Page</h1>
+    <p>Enter the password to see Metal's about me page.</p>
+
+    <input id="password" type="password" placeholder="Password" autocomplete="off" />
     <button onclick="unlock()">Unlock</button>
+
     <div class="error" id="error"></div>
   </div>
 </div>
 
-<div class="page hidden" id="site">
+<div class="wrapper hidden" id="site">
 
   <section class="hero">
-    <div class="hero-main">
-      <div class="badge">Electric Blue · Gothic Softie · Private</div>
+    <div class="hero-card">
+      <div class="badge">electric blue · gothic · soft heart</div>
+
       <h1>Metal</h1>
+
       <p>
-        A big huggable bear with a soft heart, deep loyalty, gothic vibes,
-        electric-blue energy, and a love for honesty, affection, games,
-        crystals, cuddles, and real connection.
+        A big huggable bear with a soft heart, dark-romance taste, electric-blue energy,
+        and a love for honesty, affection, games, crystals, cuddles, and deep connection.
       </p>
 
-      <div class="hero-links">
-        <a href="#about">Start Reading</a>
+      <div class="hero-buttons">
+        <a href="#about">Read About Me</a>
         <a href="#boundaries">Boundaries</a>
-        <a href="#mental">Mental State</a>
+        <a href="#nicknames">Nicknames</a>
       </div>
     </div>
 
-    <div class="profile">
-      <div class="avatar">🐻</div>
+    <div class="profile-card">
+      <div class="avatar">💙</div>
+
       <h2>Best Boy Energy</h2>
-      <p>Soft, loyal, affectionate, honest, clingy in a cute way, and happiest with someone safe.</p>
-      <div class="pills">
-        <span>💙 Electric Blue</span>
-        <span>🖤 Gothic</span>
-        <span>🎮 Gamer</span>
-        <span>🔮 Tarot</span>
-        <span>🐻 Bear</span>
+
+      <p>
+        Sweet, loyal, clingy in a cute way, protective of feelings,
+        and happiest with honest love.
+      </p>
+
+      <div class="stats">
+        <div class="stat"><strong>Color</strong>Electric Blue</div>
+        <div class="stat"><strong>Vibe</strong>Gothic Softie</div>
+        <div class="stat"><strong>Love</strong>Deep + Loyal</div>
       </div>
     </div>
   </section>
@@ -419,7 +650,7 @@ footer{
   <nav class="nav">
     <a href="#offer">Offer</a>
     <a href="#about">About</a>
-    <a href="#boundaries">Boundaries</a>
+    <a href="#boundaries">Don't</a>
     <a href="#fears">Fears</a>
     <a href="#mental">Mental</a>
     <a href="#nicknames">Nicknames</a>
@@ -429,7 +660,9 @@ footer{
   <main class="grid">
 
     <section class="card wide">
-      <p class="quote">“Be honest with me, stay gentle with me, and let me love you fully.”</p>
+      <p class="quote">
+        “Be honest with me, stay gentle with me, and let me love you fully.”
+      </p>
     </section>
 
     <section class="card" id="offer">
@@ -455,7 +688,7 @@ footer{
         <li>I enjoy alone time, but I also like having my person around.</li>
         <li>I enjoy studying, reading, writing, and singing.</li>
         <li>I love Fortnite, Marvel Rivals, Bayonetta, and LEGO games.</li>
-        <li>I love cuddling, spooning, and relaxing together.</li>
+        <li>I love cuddling, spooning, and doing absolutely nothing together.</li>
         <li>I love crystals, gemstones, and tarot cards.</li>
         <li>I enjoy horror, psychological stories, gothic aesthetics, vampires, and werewolves.</li>
       </ul>
@@ -471,8 +704,8 @@ footer{
         <li>Don't compare me to other relationships.</li>
         <li>Don't boss me around or guilt-trip me.</li>
         <li>Don't act like you own me.</li>
+        <li>Don't throw me aside when someone else is there.</li>
         <li>Don't hide things from me — be honest.</li>
-        <li>If you mess up, tell me. We can figure it out together.</li>
         <li>Don't force love or force me into things.</li>
       </ul>
     </section>
@@ -498,14 +731,14 @@ footer{
         <li>I have trouble sleeping sometimes because of past trauma.</li>
         <li>Honesty means a lot to me, so please be truthful.</li>
         <li>I sometimes feel like people dislike me, even when that may not be true.</li>
-        <li>I go through social withdrawal sometimes, but I still try my best.</li>
+        <li>I go through catatonic states and periods of social withdrawal.</li>
         <li>I have ADHD, primarily hyperactive/impulsive type.</li>
         <li>I am autistic and have some social difficulties.</li>
         <li>I grew up in a controlling environment, which affected how I interact with the world.</li>
       </ul>
     </section>
 
-    <section class="card third" id="nicknames">
+    <section class="card small" id="nicknames">
       <h2>🐻 Nicknames</h2>
       <ul>
         <li>Best boy</li>
@@ -513,35 +746,34 @@ footer{
         <li>Honey</li>
         <li>Sweetie</li>
         <li>Cutie pie</li>
-        <li>Sugar flower</li>
         <li>Prince</li>
         <li>Bear</li>
         <li>Pup / Puppy</li>
         <li>Metal</li>
+        <li>Mero</li>
+        <li>Mei Mei</li>
       </ul>
     </section>
 
-    <section class="card third" id="turnoffs">
+    <section class="card small" id="turnoffs">
       <h2>❌ Turn Offs</h2>
       <ul>
         <li>Non-consensual activities.</li>
         <li>Actually hurting someone.</li>
         <li>Being rushed.</li>
         <li>Dishonesty.</li>
-        <li>Constant harshness.</li>
+        <li>Being mean constantly.</li>
         <li>Lack of communication.</li>
-        <li>Being shared with others.</li>
+        <li>Sharing with others.</li>
       </ul>
     </section>
 
-    <section class="card third">
+    <section class="card small">
       <h2>🔐 Private Note</h2>
-      <ul>
-        <li>This page is personal.</li>
-        <li>If you're here, you're trusted.</li>
-        <li>Please treat it with kindness.</li>
-        <li>Honesty matters most.</li>
-      </ul>
+      <p>
+        This page is personal. If you're here, you're trusted.
+        Please treat this with kindness, honesty, and care.
+      </p>
     </section>
 
   </main>
@@ -549,7 +781,6 @@ footer{
   <footer>
     Made with 💙 by Metal · Electric Blue Forever
   </footer>
-
 </div>
 
 <script>
@@ -562,17 +793,19 @@ function unlock(){
   if(pass === PASSWORD){
     document.getElementById("lock").style.display = "none";
     document.getElementById("site").classList.remove("hidden");
-    sessionStorage.setItem("metalUnlocked","true");
+    sessionStorage.setItem("unlockedMetal","yes");
   }else{
     error.textContent = "Wrong password. Try again 💙";
   }
 }
 
 document.getElementById("password").addEventListener("keydown", e=>{
-  if(e.key === "Enter") unlock();
+  if(e.key === "Enter"){
+    unlock();
+  }
 });
 
-if(sessionStorage.getItem("metalUnlocked") === "true"){
+if(sessionStorage.getItem("unlockedMetal") === "yes"){
   document.getElementById("lock").style.display = "none";
   document.getElementById("site").classList.remove("hidden");
 }
