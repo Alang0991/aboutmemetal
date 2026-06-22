@@ -1,27 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Metal's About Me</title>
 
 <style>
 :root{
-  --bg:#02040a;
-  --card:rgba(255,255,255,.08);
-  --line:rgba(255,255,255,.16);
-  --text:#f5fbff;
-  --muted:#b7c9d8;
   --blue:#39c8ff;
   --blue2:#0077ff;
   --purple:#9b5cff;
-  --pink:#ff4fd8;
+  --text:#f5fbff;
+  --muted:#b7c9d8;
+  --line:rgba(255,255,255,.16);
 }
 
 *{
-  box-sizing:border-box;
   margin:0;
   padding:0;
+  box-sizing:border-box;
 }
 
 html{
@@ -30,13 +27,12 @@ html{
 
 body{
   min-height:100vh;
-  font-family:Inter,Segoe UI,system-ui,sans-serif;
+  font-family:Segoe UI, system-ui, sans-serif;
   color:var(--text);
   background:
-    radial-gradient(circle at 15% 10%, rgba(57,200,255,.35), transparent 32%),
-    radial-gradient(circle at 90% 20%, rgba(155,92,255,.25), transparent 34%),
-    radial-gradient(circle at 50% 100%, rgba(0,119,255,.22), transparent 36%),
-    linear-gradient(145deg,#02040a,#07111f 45%,#02040a);
+    radial-gradient(circle at top left, rgba(57,200,255,.35), transparent 35%),
+    radial-gradient(circle at top right, rgba(155,92,255,.25), transparent 35%),
+    linear-gradient(135deg,#02040a,#07111f,#02040a);
   overflow-x:hidden;
 }
 
@@ -45,12 +41,11 @@ body::before{
   position:fixed;
   inset:0;
   background-image:
-    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
-  background-size:42px 42px;
-  mask-image:linear-gradient(to bottom, black, transparent);
+    linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size:44px 44px;
   pointer-events:none;
-  z-index:-3;
+  z-index:-2;
 }
 
 body::after{
@@ -60,54 +55,47 @@ body::after{
   background-image:radial-gradient(white 1px, transparent 1px);
   background-size:80px 80px;
   opacity:.12;
-  animation:starsMove 35s linear infinite;
+  animation:stars 35s linear infinite;
   pointer-events:none;
-  z-index:-2;
+  z-index:-1;
 }
 
-@keyframes starsMove{
-  from{transform:translateY(0)}
-  to{transform:translateY(80px)}
+@keyframes stars{
+  from{transform:translateY(0);}
+  to{transform:translateY(80px);}
+}
+
+.hidden{
+  display:none;
 }
 
 .orb{
   position:fixed;
-  width:280px;
-  height:280px;
+  width:260px;
+  height:260px;
   border-radius:50%;
-  background:rgba(57,200,255,.18);
   filter:blur(45px);
-  animation:float 7s ease-in-out infinite alternate;
   pointer-events:none;
-  z-index:-1;
+  opacity:.75;
+  animation:float 7s ease-in-out infinite alternate;
 }
 
 .orb.one{
   top:10%;
   left:-90px;
+  background:rgba(57,200,255,.22);
 }
 
 .orb.two{
-  right:-100px;
+  right:-90px;
   bottom:8%;
   background:rgba(155,92,255,.2);
   animation-delay:1s;
 }
 
-.orb.three{
-  left:35%;
-  bottom:-150px;
-  background:rgba(0,119,255,.16);
-  animation-delay:2s;
-}
-
 @keyframes float{
-  from{transform:translateY(0) scale(1)}
-  to{transform:translateY(-35px) scale(1.08)}
-}
-
-.hidden{
-  display:none;
+  from{transform:translateY(0) scale(1);}
+  to{transform:translateY(-35px) scale(1.08);}
 }
 
 /* PASSWORD SCREEN */
@@ -115,53 +103,51 @@ body::after{
 .lock{
   position:fixed;
   inset:0;
-  z-index:100;
+  z-index:1000;
   display:grid;
   place-items:center;
-  padding:22px;
-  background:rgba(2,4,10,.94);
-  backdrop-filter:blur(22px);
+  padding:20px;
+  background:rgba(2,4,10,.95);
+  backdrop-filter:blur(20px);
 }
 
 .lock-box{
   width:min(430px,100%);
-  padding:36px;
-  border-radius:34px;
+  padding:34px;
   text-align:center;
-  background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.045));
+  border-radius:32px;
+  background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.04));
   border:1px solid var(--line);
-  box-shadow:
-    0 0 70px rgba(57,200,255,.3),
-    inset 0 1px 0 rgba(255,255,255,.12);
+  box-shadow:0 0 70px rgba(57,200,255,.32);
 }
 
 .lock-icon{
-  width:80px;
-  height:80px;
+  width:82px;
+  height:82px;
   margin:0 auto 18px;
   border-radius:50%;
   display:grid;
   place-items:center;
   font-size:2.8rem;
   background:linear-gradient(135deg,var(--blue),var(--purple));
-  box-shadow:0 0 35px rgba(57,200,255,.45);
-  animation:pulse 4s infinite ease-in-out;
+  box-shadow:0 0 40px rgba(57,200,255,.5);
+  animation:pulse 4s ease-in-out infinite;
 }
 
 @keyframes pulse{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.08)}
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.08);}
 }
 
 .lock-box h1{
-  font-size:2.1rem;
   color:var(--blue);
-  text-shadow:0 0 20px rgba(57,200,255,.6);
+  font-size:2rem;
+  text-shadow:0 0 20px rgba(57,200,255,.55);
 }
 
 .lock-box p{
-  color:var(--muted);
   margin:12px 0 22px;
+  color:var(--muted);
   line-height:1.6;
 }
 
@@ -172,12 +158,12 @@ input{
   border:1px solid var(--line);
   background:rgba(0,0,0,.35);
   color:white;
-  outline:none;
   font-size:1rem;
+  outline:none;
 }
 
 input:focus{
-  border-color:rgba(57,200,255,.65);
+  border-color:rgba(57,200,255,.7);
   box-shadow:0 0 0 4px rgba(57,200,255,.12);
 }
 
@@ -187,17 +173,17 @@ button{
   padding:15px;
   border:0;
   border-radius:18px;
-  font-weight:900;
   cursor:pointer;
+  font-weight:900;
   color:#00111d;
   background:linear-gradient(135deg,var(--blue),var(--blue2));
-  box-shadow:0 0 25px rgba(57,200,255,.32);
+  box-shadow:0 0 28px rgba(57,200,255,.35);
   transition:.25s ease;
 }
 
 button:hover{
   transform:translateY(-2px);
-  box-shadow:0 0 38px rgba(57,200,255,.5);
+  box-shadow:0 0 38px rgba(57,200,255,.55);
 }
 
 .error{
@@ -206,7 +192,7 @@ button:hover{
   min-height:22px;
 }
 
-/* MAIN PAGE */
+/* MAIN SITE */
 
 .wrapper{
   width:min(1180px,100%);
@@ -242,9 +228,9 @@ button:hover{
 .hero-card::before{
   content:"";
   position:absolute;
-  inset:-2px;
+  inset:0;
   background:
-    radial-gradient(circle at top left,rgba(57,200,255,.22),transparent 35%),
+    radial-gradient(circle at top left,rgba(57,200,255,.22),transparent 38%),
     radial-gradient(circle at bottom right,rgba(155,92,255,.18),transparent 40%);
   pointer-events:none;
 }
@@ -255,7 +241,7 @@ button:hover{
 }
 
 .badge{
-  width:max-content;
+  display:inline-block;
   max-width:100%;
   padding:9px 15px;
   margin-bottom:18px;
@@ -384,8 +370,6 @@ h1{
 /* NAV */
 
 .nav{
-  position:relative;
-  z-index:10;
   display:flex;
   justify-content:center;
   flex-wrap:wrap;
@@ -594,7 +578,6 @@ footer{
 
 <div class="orb one"></div>
 <div class="orb two"></div>
-<div class="orb three"></div>
 
 <div class="lock" id="lock">
   <div class="lock-box">
@@ -602,7 +585,7 @@ footer{
     <h1>Private Page</h1>
     <p>Enter the password to see Metal's about me page.</p>
 
-    <input id="password" type="password" placeholder="Password" autocomplete="off" />
+    <input id="password" type="password" placeholder="Password" autocomplete="off">
     <button onclick="unlock()">Unlock</button>
 
     <div class="error" id="error"></div>
@@ -781,6 +764,7 @@ footer{
   <footer>
     Made with 💙 by Metal · Electric Blue Forever
   </footer>
+
 </div>
 
 <script>
@@ -799,7 +783,7 @@ function unlock(){
   }
 }
 
-document.getElementById("password").addEventListener("keydown", e=>{
+document.getElementById("password").addEventListener("keydown", function(e){
   if(e.key === "Enter"){
     unlock();
   }
