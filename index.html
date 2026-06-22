@@ -1,874 +1,275 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#05101f" />
 <title>Metal's About Me</title>
 
 <style>
 :root{
-  --blue:#39c8ff;
-  --blue2:#0077ff;
-  --purple:#9b5cff;
-  --text:#f5fbff;
-  --muted:#b7c9d8;
+  --bg:#02040a;
+  --bg-2:#061225;
+  --panel:rgba(255,255,255,.085);
+  --panel-strong:rgba(255,255,255,.13);
   --line:rgba(255,255,255,.16);
+  --line-hot:rgba(57,200,255,.45);
+  --blue:#39c8ff;
+  --blue-2:#0077ff;
+  --purple:#9b5cff;
+  --pink:#ff70c8;
+  --text:#f6fbff;
+  --muted:#b8c8d8;
+  --shadow:0 28px 90px rgba(0,0,0,.42);
+  --radius-xl:36px;
+  --radius-lg:26px;
+  --radius-md:18px;
+  --max:1180px;
 }
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-html{
-  scroll-behavior:smooth;
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:96px}
 body{
   min-height:100vh;
-  font-family:Segoe UI, system-ui, sans-serif;
+  font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color:var(--text);
   background:
-    radial-gradient(circle at top left, rgba(57,200,255,.35), transparent 35%),
-    radial-gradient(circle at top right, rgba(155,92,255,.25), transparent 35%),
-    linear-gradient(135deg,#02040a,#07111f,#02040a);
+    radial-gradient(circle at 12% 8%, rgba(57,200,255,.34), transparent 30%),
+    radial-gradient(circle at 88% 12%, rgba(155,92,255,.30), transparent 32%),
+    radial-gradient(circle at 55% 95%, rgba(0,119,255,.20), transparent 38%),
+    linear-gradient(135deg,var(--bg),var(--bg-2) 48%,#02040a);
   overflow-x:hidden;
 }
-
-.hidden{
-  display:none !important;
-}
-
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background-image:
-    linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
-  background-size:44px 44px;
-  pointer-events:none;
-  z-index:-2;
-}
-
+body.locked{overflow:hidden}
+body::before,
 body::after{
   content:"";
   position:fixed;
   inset:0;
-  background-image:radial-gradient(white 1px, transparent 1px);
-  background-size:80px 80px;
-  opacity:.12;
-  animation:stars 35s linear infinite;
   pointer-events:none;
+  z-index:-2;
+}
+body::before{
+  background-image:
+    linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px);
+  background-size:54px 54px;
+  mask-image:radial-gradient(circle at center, black 0 55%, transparent 82%);
+}
+body::after{
   z-index:-1;
+  background-image:radial-gradient(rgba(255,255,255,.95) 1px, transparent 1px);
+  background-size:86px 86px;
+  opacity:.13;
+  animation:starDrift 38s linear infinite;
 }
+@keyframes starDrift{to{transform:translateY(86px)}}
 
-@keyframes stars{
-  from{transform:translateY(0);}
-  to{transform:translateY(80px);}
-}
+::selection{background:rgba(57,200,255,.32);color:white}
+a{color:inherit}
+.hidden{display:none!important}
 
-.orb{
+.blob{
   position:fixed;
-  width:260px;
-  height:260px;
-  border-radius:50%;
-  filter:blur(45px);
-  pointer-events:none;
-  opacity:.75;
-  animation:float 7s ease-in-out infinite alternate;
-  z-index:-1;
+  width:340px;height:340px;border-radius:999px;
+  filter:blur(58px);opacity:.72;pointer-events:none;z-index:-1;
+  animation:float 8s ease-in-out infinite alternate;
 }
+.blob.one{left:-120px;top:8%;background:rgba(57,200,255,.28)}
+.blob.two{right:-130px;bottom:8%;background:rgba(155,92,255,.24);animation-delay:1.5s}
+.blob.three{left:42%;bottom:-180px;background:rgba(0,119,255,.18);animation-delay:.8s}
+@keyframes float{to{transform:translate3d(0,-34px,0) scale(1.08)}}
 
-.orb.one{
-  top:10%;
-  left:-90px;
-  background:rgba(57,200,255,.22);
-}
-
-.orb.two{
-  right:-90px;
-  bottom:8%;
-  background:rgba(155,92,255,.2);
-  animation-delay:1s;
-}
-
-@keyframes float{
-  from{transform:translateY(0) scale(1);}
-  to{transform:translateY(-35px) scale(1.08);}
-}
-
-/* PASSWORD SCREEN */
-
+/* LOCK */
 .lock{
-  position:fixed;
-  inset:0;
-  z-index:1000;
-  display:grid;
-  place-items:center;
-  padding:20px;
-  background:rgba(2,4,10,.96);
-  backdrop-filter:blur(20px);
+  position:fixed;inset:0;z-index:1000;display:grid;place-items:center;
+  padding:clamp(18px,4vw,36px);
+  background:rgba(2,4,10,.82);
+  backdrop-filter:blur(26px) saturate(1.2);
 }
-
 .lock-box{
-  width:min(430px,100%);
+  width:min(460px,100%);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:34px;
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.055)),
+    radial-gradient(circle at top,rgba(57,200,255,.16),transparent 45%);
+  box-shadow:0 30px 100px rgba(0,0,0,.55),0 0 80px rgba(57,200,255,.20);
   padding:34px;
   text-align:center;
-  border-radius:32px;
-  background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(255,255,255,.04));
-  border:1px solid var(--line);
-  box-shadow:0 0 70px rgba(57,200,255,.32);
+  position:relative;
+  overflow:hidden;
 }
-
+.lock-box::before{
+  content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;
+  background:linear-gradient(135deg,rgba(57,200,255,.85),rgba(155,92,255,.45),transparent 60%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
 .lock-icon{
-  width:82px;
-  height:82px;
-  margin:0 auto 18px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  font-size:2.8rem;
+  width:88px;height:88px;margin:0 auto 18px;border-radius:28px;
+  display:grid;place-items:center;font-size:3rem;
   background:linear-gradient(135deg,var(--blue),var(--purple));
-  box-shadow:0 0 40px rgba(57,200,255,.5);
-  animation:pulse 4s ease-in-out infinite;
+  box-shadow:0 0 42px rgba(57,200,255,.52);
+  transform:rotate(-6deg);
+  animation:pulse 3.5s ease-in-out infinite;
 }
-
-@keyframes pulse{
-  0%,100%{transform:scale(1);}
-  50%{transform:scale(1.08);}
+@keyframes pulse{50%{transform:rotate(6deg) scale(1.06)}}
+.lock-box h1{font-size:clamp(2rem,7vw,3.2rem);line-height:.95;color:white;letter-spacing:-.06em}
+.lock-box p{margin:14px auto 24px;color:var(--muted);line-height:1.6;max-width:32ch}
+.input-wrap{display:flex;gap:10px;background:rgba(0,0,0,.28);border:1px solid var(--line);border-radius:20px;padding:8px;align-items:center}
+.input-wrap:focus-within{border-color:var(--line-hot);box-shadow:0 0 0 5px rgba(57,200,255,.11)}
+input{min-width:0;flex:1;border:0;outline:0;background:transparent;color:white;font:inherit;padding:11px 10px}
+input::placeholder{color:rgba(246,251,255,.45)}
+.eye{width:auto;margin:0;padding:10px 12px;border-radius:14px;color:var(--text);background:rgba(255,255,255,.08);box-shadow:none}
+button,.btn{
+  border:0;cursor:pointer;font-weight:900;text-decoration:none;
+  transition:transform .22s ease, box-shadow .22s ease, background .22s ease;
 }
-
-.lock-box h1{
-  color:var(--blue);
-  font-size:2rem;
-  text-shadow:0 0 20px rgba(57,200,255,.55);
+.unlock-btn{
+  width:100%;margin-top:14px;padding:16px;border-radius:20px;color:#00111d;
+  background:linear-gradient(135deg,var(--blue),var(--blue-2));
+  box-shadow:0 18px 38px rgba(57,200,255,.30);
 }
+button:hover,.btn:hover{transform:translateY(-2px)}
+.error{min-height:22px;margin-top:12px;color:#ff8cbf;font-weight:700}
 
-.lock-box p{
-  margin:12px 0 22px;
-  color:var(--muted);
-  line-height:1.6;
+/* LAYOUT */
+.site-shell{width:min(var(--max),100%);margin:auto;padding:22px clamp(16px,4vw,28px) 60px}
+.topbar{
+  position:sticky;top:12px;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin-bottom:24px;padding:10px;border:1px solid var(--line);border-radius:999px;
+  background:rgba(3,7,19,.66);backdrop-filter:blur(18px);box-shadow:0 12px 40px rgba(0,0,0,.25);
 }
+.brand{display:flex;align-items:center;gap:10px;padding:0 8px;font-weight:950;letter-spacing:-.03em;color:white}
+.brand-mark{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--blue),var(--purple));box-shadow:0 0 24px rgba(57,200,255,.38)}
+.nav{display:flex;gap:6px;overflow:auto;scrollbar-width:none}.nav::-webkit-scrollbar{display:none}
+.nav a{white-space:nowrap;text-decoration:none;color:rgba(255,255,255,.82);font-weight:750;font-size:.92rem;padding:10px 13px;border-radius:999px;background:rgba(255,255,255,.055);border:1px solid transparent}
+.nav a:hover{color:var(--blue);background:rgba(57,200,255,.13);border-color:rgba(57,200,255,.22)}
 
-input{
-  width:100%;
-  padding:15px 16px;
-  border-radius:18px;
-  border:1px solid var(--line);
-  background:rgba(0,0,0,.35);
-  color:white;
-  font-size:1rem;
-  outline:none;
+.hero{min-height:calc(100vh - 110px);display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:22px;align-items:center;padding:20px 0 34px}
+.panel{
+  border:1px solid var(--line);background:linear-gradient(145deg,var(--panel-strong),rgba(255,255,255,.045));
+  backdrop-filter:blur(20px);box-shadow:var(--shadow);position:relative;overflow:hidden;
 }
+.panel::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at top left,rgba(57,200,255,.18),transparent 38%),radial-gradient(circle at bottom right,rgba(155,92,255,.14),transparent 40%);pointer-events:none}
+.panel>*{position:relative;z-index:1}
+.hero-card{border-radius:44px;padding:clamp(28px,5vw,56px)}
+.kicker{display:inline-flex;align-items:center;gap:8px;max-width:100%;padding:9px 14px;margin-bottom:20px;border-radius:999px;color:var(--blue);font-weight:900;font-size:.88rem;background:rgba(57,200,255,.12);border:1px solid rgba(57,200,255,.28);box-shadow:inset 0 0 20px rgba(57,200,255,.05)}
+h1{font-size:clamp(4.2rem,13vw,9.4rem);line-height:.78;letter-spacing:-.09em;color:var(--blue);text-shadow:0 0 42px rgba(57,200,255,.58)}
+.lead{margin-top:26px;color:var(--muted);font-size:clamp(1.04rem,2vw,1.24rem);line-height:1.75;max-width:64ch}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.08);color:white}.btn.primary{color:#00111d;background:linear-gradient(135deg,var(--blue),var(--blue-2));border-color:transparent;box-shadow:0 16px 38px rgba(57,200,255,.26)}
+.profile-card{border-radius:44px;padding:26px;text-align:center}.avatar{width:190px;aspect-ratio:1;margin:4px auto 22px;border-radius:38% 62% 46% 54% / 52% 42% 58% 48%;display:grid;place-items:center;font-size:4.7rem;background:radial-gradient(circle,rgba(255,255,255,.28),transparent 56%),linear-gradient(135deg,var(--blue),var(--purple));box-shadow:0 0 60px rgba(57,200,255,.50);animation:morph 7s ease-in-out infinite alternate}@keyframes morph{to{border-radius:57% 43% 61% 39% / 41% 60% 40% 59%;transform:translateY(-8px)}}
+.profile-card h2{font-size:2rem;color:white;letter-spacing:-.04em}.profile-card p{color:var(--muted);line-height:1.7;margin-top:10px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:24px}.stat{padding:14px 9px;border-radius:18px;background:rgba(255,255,255,.07);border:1px solid var(--line)}.stat strong{display:block;color:var(--blue);font-size:.82rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px}
 
-input:focus{
-  border-color:rgba(57,200,255,.7);
-  box-shadow:0 0 0 4px rgba(57,200,255,.12);
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}.card{grid-column:span 6;border-radius:var(--radius-xl);padding:clamp(22px,3.2vw,32px);border:1px solid rgba(255,255,255,.14);background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.045));backdrop-filter:blur(18px);box-shadow:0 18px 58px rgba(0,0,0,.26);position:relative;overflow:hidden;transition:.28s ease}.card:hover{transform:translateY(-6px);border-color:rgba(57,200,255,.40);box-shadow:0 26px 72px rgba(0,0,0,.34),0 0 34px rgba(57,200,255,.14)}.card.wide{grid-column:span 12}.card.small{grid-column:span 4}.card::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(57,200,255,.10),transparent 44%),radial-gradient(circle at 100% 0,rgba(155,92,255,.11),transparent 40%);pointer-events:none}.card>*{position:relative;z-index:1}.card h2{font-size:1.55rem;margin-bottom:16px;color:white;letter-spacing:-.035em}.card h2 span{color:var(--blue)}.card p,.card li{color:#dceeff;line-height:1.65}ul{padding-left:1.2rem}li{margin-bottom:10px}.quote{font-size:clamp(1.55rem,3vw,2.25rem);line-height:1.35;text-align:center;font-weight:950;color:white!important;letter-spacing:-.04em}.quote em{font-style:normal;color:var(--blue)}
+details{border:1px solid rgba(57,200,255,.22);background:rgba(0,0,0,.18);border-radius:22px;padding:16px}summary{cursor:pointer;color:var(--blue);font-weight:950;font-size:1.05rem;list-style:none}summary::-webkit-details-marker{display:none}details[open] summary{margin-bottom:14px}.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.chip{padding:8px 11px;border-radius:999px;background:rgba(57,200,255,.10);border:1px solid rgba(57,200,255,.22);color:#dff6ff;font-weight:750;font-size:.88rem}
+footer{text-align:center;color:var(--muted);padding:48px 14px 10px;line-height:1.7}
+
+@media (max-width: 900px){
+  .site-shell{padding-top:14px}.topbar{top:8px;border-radius:24px;align-items:flex-start;flex-direction:column}.nav{width:100%;padding-bottom:2px}.hero{min-height:auto;grid-template-columns:1fr;padding:18px 0 26px}.hero-card,.profile-card{border-radius:32px}.stats{grid-template-columns:1fr 1fr 1fr}.card,.card.small,.card.wide{grid-column:span 12}h1{letter-spacing:-.075em}
 }
-
-button{
-  width:100%;
-  margin-top:14px;
-  padding:15px;
-  border:0;
-  border-radius:18px;
-  cursor:pointer;
-  font-weight:900;
-  color:#00111d;
-  background:linear-gradient(135deg,var(--blue),var(--blue2));
-  box-shadow:0 0 28px rgba(57,200,255,.35);
-  transition:.25s ease;
+@media (max-width: 620px){
+  html{scroll-padding-top:130px}.lock-box{padding:26px 20px;border-radius:28px}.lock-icon{width:76px;height:76px;border-radius:24px}.brand{font-size:.95rem}.nav a{font-size:.85rem;padding:9px 11px}.hero-card{text-align:center;padding:28px 20px}.kicker{margin-left:auto;margin-right:auto}.hero-actions{display:grid;grid-template-columns:1fr}.btn{width:100%}.avatar{width:142px;font-size:3.5rem}.stats{grid-template-columns:1fr}.card{border-radius:26px}.quote{text-align:left}ul{padding-left:1rem}li{margin-bottom:9px}
 }
-
-button:hover{
-  transform:translateY(-2px);
-  box-shadow:0 0 38px rgba(57,200,255,.55);
-}
-
-.error{
-  margin-top:12px;
-  color:#ff7aa7;
-  min-height:22px;
-}
-
-/* MAIN SITE */
-
-.wrapper{
-  width:min(1180px,100%);
-  margin:auto;
-  padding:24px;
-}
-
-.hero{
-  min-height:100vh;
-  display:grid;
-  grid-template-columns:1.1fr .9fr;
-  align-items:center;
-  gap:28px;
-  padding:30px 0;
-}
-
-.hero-card,
-.profile-card,
-.card{
-  border:1px solid var(--line);
-  background:linear-gradient(145deg,rgba(255,255,255,.105),rgba(255,255,255,.045));
-  backdrop-filter:blur(18px);
-  box-shadow:0 25px 70px rgba(0,0,0,.3);
-}
-
-.hero-card{
-  padding:46px;
-  border-radius:40px;
-  position:relative;
-  overflow:hidden;
-}
-
-.hero-card::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(circle at top left,rgba(57,200,255,.22),transparent 38%),
-    radial-gradient(circle at bottom right,rgba(155,92,255,.18),transparent 40%);
-  pointer-events:none;
-}
-
-.hero-card > *{
-  position:relative;
-  z-index:1;
-}
-
-.badge{
-  display:inline-block;
-  max-width:100%;
-  padding:9px 15px;
-  margin-bottom:18px;
-  border-radius:999px;
-  background:rgba(57,200,255,.13);
-  border:1px solid rgba(57,200,255,.34);
-  color:var(--blue);
-  font-weight:800;
-  font-size:.9rem;
-}
-
-h1{
-  font-size:clamp(4rem,12vw,9rem);
-  line-height:.85;
-  color:var(--blue);
-  letter-spacing:-5px;
-  text-shadow:0 0 38px rgba(57,200,255,.62);
-}
-
-.hero-card p{
-  margin-top:24px;
-  color:var(--muted);
-  font-size:1.15rem;
-  line-height:1.75;
-}
-
-.hero-buttons{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:30px;
-}
-
-.hero-buttons a{
-  text-decoration:none;
-  color:white;
-  padding:13px 18px;
-  border-radius:999px;
-  background:rgba(255,255,255,.09);
-  border:1px solid var(--line);
-  transition:.25s ease;
-}
-
-.hero-buttons a:hover{
-  transform:translateY(-2px);
-  background:rgba(57,200,255,.16);
-  color:var(--blue);
-}
-
-.hero-buttons a:first-child{
-  color:#00111d;
-  background:linear-gradient(135deg,var(--blue),var(--blue2));
-  font-weight:900;
-}
-
-.profile-card{
-  padding:28px;
-  border-radius:40px;
-  text-align:center;
-}
-
-.avatar{
-  width:180px;
-  height:180px;
-  margin:0 auto 22px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  font-size:4.6rem;
-  background:
-    radial-gradient(circle,rgba(255,255,255,.26),transparent 55%),
-    linear-gradient(135deg,var(--blue),var(--purple));
-  box-shadow:0 0 55px rgba(57,200,255,.55);
-  animation:pulse 4s infinite ease-in-out;
-}
-
-.profile-card h2{
-  color:var(--blue);
-  font-size:2rem;
-  text-shadow:0 0 15px rgba(57,200,255,.45);
-}
-
-.profile-card p{
-  color:var(--muted);
-  margin-top:10px;
-  line-height:1.7;
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-top:24px;
-}
-
-.stat{
-  padding:14px 8px;
-  border-radius:18px;
-  background:rgba(255,255,255,.07);
-  border:1px solid var(--line);
-}
-
-.stat strong{
-  display:block;
-  color:var(--blue);
-  margin-bottom:4px;
-}
-
-.nav{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-  gap:10px;
-  margin:0 0 30px;
-  padding:12px;
-  border-radius:26px;
-  background:rgba(3,7,19,.62);
-  border:1px solid var(--line);
-  backdrop-filter:blur(18px);
-}
-
-.nav a{
-  white-space:nowrap;
-  color:white;
-  text-decoration:none;
-  padding:10px 14px;
-  border-radius:999px;
-  background:rgba(255,255,255,.07);
-  transition:.25s ease;
-}
-
-.nav a:hover{
-  color:var(--blue);
-  background:rgba(57,200,255,.16);
-  transform:translateY(-2px);
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(12,1fr);
-  gap:20px;
-}
-
-.card{
-  grid-column:span 6;
-  border-radius:34px;
-  padding:30px;
-  position:relative;
-  overflow:hidden;
-  transition:.35s ease;
-  border:1px solid rgba(57,200,255,.16);
-}
-
-.card.wide{
-  grid-column:span 12;
-}
-
-.card.small{
-  grid-column:span 4;
-}
-
-.card:hover{
-  transform:translateY(-8px);
-  border-color:rgba(57,200,255,.48);
-  box-shadow:
-    0 25px 60px rgba(0,0,0,.38),
-    0 0 34px rgba(57,200,255,.18);
-}
-
-.card::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(circle at top left,rgba(57,200,255,.16),transparent 40%),
-    linear-gradient(135deg,rgba(57,200,255,.08),transparent 45%);
-  pointer-events:none;
-}
-
-.card > *{
-  position:relative;
-  z-index:1;
-}
-
-.card h2{
-  color:var(--blue);
-  margin-bottom:16px;
-  font-size:1.6rem;
-  text-shadow:0 0 15px rgba(57,200,255,.5);
-}
-
-.card p,
-.card li{
-  color:#dceeff;
-  line-height:1.6;
-}
-
-ul{
-  padding-left:20px;
-}
-
-li{
-  margin-bottom:10px;
-}
-
-.quote{
-  font-size:clamp(1.45rem,3vw,2.15rem);
-  text-align:center;
-  font-weight:900;
-  color:white!important;
-  line-height:1.4;
-}
-
-details{
-  position:relative;
-  z-index:2;
-}
-
-summary{
-  cursor:pointer;
-  color:var(--blue);
-  font-weight:900;
-  font-size:1.15rem;
-  margin-bottom:15px;
-}
-
-footer{
-  text-align:center;
-  padding:50px 20px;
-  color:var(--muted);
-}
-
-@media(max-width:850px){
-  .wrapper{
-    padding:16px;
-  }
-
-  .hero{
-    min-height:auto;
-    padding:28px 0;
-    grid-template-columns:1fr;
-  }
-
-  .hero-card{
-    padding:32px 24px;
-    border-radius:32px;
-  }
-
-  h1{
-    letter-spacing:-3px;
-  }
-
-  .profile-card{
-    border-radius:32px;
-  }
-
-  .card,
-  .card.small,
-  .card.wide{
-    grid-column:span 12;
-  }
-
-  .stats{
-    grid-template-columns:1fr;
-  }
-
-  .nav{
-    justify-content:flex-start;
-    flex-wrap:nowrap;
-    overflow-x:auto;
-    padding:10px;
-  }
-}
-
-@media(max-width:700px){
-  .hero-card{
-    text-align:center;
-  }
-
-  .badge{
-    margin-left:auto;
-    margin-right:auto;
-  }
-
-  .hero-buttons{
-    justify-content:center;
-  }
-
-  .hero-buttons a{
-    width:100%;
-    text-align:center;
-  }
-
-  .card{
-    padding:24px;
-  }
-}
-
-@media(max-width:480px){
-  .lock-box{
-    padding:26px 20px;
-    border-radius:26px;
-  }
-
-  .avatar{
-    width:135px;
-    height:135px;
-    font-size:3.4rem;
-  }
-
-  h1{
-    font-size:clamp(3.3rem,18vw,5.5rem);
-  }
-
-  .card{
-    padding:22px;
-    border-radius:26px;
-  }
-}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 
-<body>
+<body class="locked">
+<div class="blob one"></div><div class="blob two"></div><div class="blob three"></div>
 
-<div class="orb one"></div>
-<div class="orb two"></div>
-
-<div class="lock" id="lock">
+<section class="lock" id="lock" aria-label="Password lock screen">
   <div class="lock-box">
-    <div class="lock-icon">💙</div>
+    <div class="lock-icon" aria-hidden="true">💙</div>
     <h1>Private Page</h1>
-    <p>Enter the password to see Metal's about me page.</p>
-
-    <input id="password" type="password" placeholder="Password" autocomplete="off">
-    <button type="button" onclick="unlock()">Unlock</button>
-
-    <div class="error" id="error"></div>
+    <p>Enter the password to unlock Metal's personal about-me page.</p>
+    <form id="passwordForm" autocomplete="off">
+      <div class="input-wrap">
+        <input id="password" type="password" placeholder="Password" aria-label="Password" />
+        <button class="eye" id="togglePassword" type="button" aria-label="Show password">👁️</button>
+      </div>
+      <button class="unlock-btn" type="submit">Unlock</button>
+      <div class="error" id="error" role="status" aria-live="polite"></div>
+    </form>
   </div>
-</div>
+</section>
 
-<div class="wrapper hidden" id="site">
+<div class="site-shell hidden" id="site">
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Metal home"><span class="brand-mark">💙</span><span>Metal's Page</span></a>
+    <nav class="nav" aria-label="Page sections">
+      <a href="#offer">Offer</a><a href="#about">About</a><a href="#boundaries">Boundaries</a><a href="#fears">Fears</a><a href="#preferences">Private</a><a href="#mental">Mental</a><a href="#nicknames">Names</a><a href="#turnoffs">Turn Offs</a>
+    </nav>
+  </header>
 
-  <section class="hero">
-    <div class="hero-card">
-      <div class="badge">electric blue · gothic · soft heart</div>
+  <main id="top">
+    <section class="hero">
+      <article class="panel hero-card">
+        <div class="kicker">✦ electric blue · gothic · soft heart</div>
+        <h1>Metal</h1>
+        <p class="lead">A big huggable bear with a soft heart, electric-blue energy, gothic taste, deep feelings, and a love for honesty, affection, games, crystals, cuddles, and real connection.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#about">Read About Me</a>
+          <a class="btn" href="#boundaries">Respect Boundaries</a>
+          <a class="btn" href="#preferences">Private Section</a>
+        </div>
+      </article>
 
-      <h1>Metal</h1>
-
-      <p>
-        A big huggable bear with a soft heart, electric-blue energy,
-        gothic taste, deep feelings, and a love for honesty, affection,
-        games, crystals, cuddles, and real connection.
-      </p>
-
-      <div class="hero-buttons">
-        <a href="#about">Read About Me</a>
-        <a href="#boundaries">Boundaries</a>
-        <a href="#preferences">Private Preferences</a>
-      </div>
-    </div>
-
-    <div class="profile-card">
-      <div class="avatar">💙</div>
-
-      <h2>Best Boy Energy</h2>
-
-      <p>
-        Sweet, loyal, affectionate, honest, protective of feelings,
-        and happiest with safe, honest love.
-      </p>
-
-      <div class="stats">
-        <div class="stat"><strong>Color</strong>Electric Blue</div>
-        <div class="stat"><strong>Vibe</strong>Gothic Softie</div>
-        <div class="stat"><strong>Love</strong>Deep + Loyal</div>
-      </div>
-    </div>
-  </section>
-
-  <nav class="nav">
-    <a href="#offer">Offer</a>
-    <a href="#about">About</a>
-    <a href="#boundaries">Don't</a>
-    <a href="#fears">Fears</a>
-    <a href="#preferences">Private</a>
-    <a href="#mental">Mental</a>
-    <a href="#nicknames">Nicknames</a>
-    <a href="#turnoffs">Turn Offs</a>
-  </nav>
-
-  <main class="grid">
-
-    <section class="card wide">
-      <p class="quote">
-        “Be honest with me, stay gentle with me, and let me love you fully.”
-      </p>
+      <aside class="panel profile-card">
+        <div class="avatar">💙</div>
+        <h2>Best Boy Energy</h2>
+        <p>Sweet, loyal, affectionate, honest, protective of feelings, and happiest with safe, honest love.</p>
+        <div class="stats">
+          <div class="stat"><strong>Color</strong>Electric Blue</div>
+          <div class="stat"><strong>Vibe</strong>Gothic Softie</div>
+          <div class="stat"><strong>Love</strong>Deep + Loyal</div>
+        </div>
+      </aside>
     </section>
 
-    <section class="card" id="offer">
-      <h2>💙 What I Can Offer</h2>
-      <ul>
-        <li>Unending love.</li>
-        <li>Texts every day and calls at least once a week.</li>
-        <li>Support whenever you need it.</li>
-        <li>Cute couple art and other fun surprises.</li>
-        <li>Help in any way I can.</li>
-        <li>Hugs, kisses, cuddles, and affection.</li>
-        <li>Letting you be yourself around me.</li>
-        <li>Fun conversations and random topics.</li>
-        <li>Free art. :0</li>
-      </ul>
-    </section>
+    <section class="grid">
+      <article class="card wide"><p class="quote">“Be honest with me, stay gentle with me, and let me <em>love you fully</em>.”</p></article>
 
-    <section class="card" id="about">
-      <h2>✨ About Me</h2>
-      <ul>
-        <li>My favorite color is Electric Blue.</li>
-        <li>I'm fun, honest, and basically a big huggable bear.</li>
-        <li>I enjoy having time to myself, but I also like having people around (you &lt;3).</li>
-        <li>I love showers, especially sharing them with someone and helping wash their back.</li>
-        <li>I enjoy studying, reading, writing, and singing.</li>
-        <li>I love playing games like Fortnite, Marvel Rivals, Bayonetta, and LEGO games.</li>
-        <li>I love cuddling, spooning, or just laying in bed together doing absolutely nothing.</li>
-        <li>I like being around someone I can sit in comfortable silence with.</li>
-        <li>I love crystals and gemstones like amethysts, rubies, and sapphires.</li>
-        <li>I can read tarot cards.</li>
-        <li>I enjoy horror movies, psychological stories, and darker themes.</li>
-        <li>I love gothic aesthetics and monsters such as vampires and werewolves.</li>
-        <li>I enjoy toxic romance fiction and dark romance stories, including things like Hannibal.</li>
-      </ul>
-    </section>
+      <section class="card" id="offer"><h2>💙 <span>What I Can Offer</span></h2><ul><li>Unending love.</li><li>Texts every day and calls at least once a week.</li><li>Support whenever you need it.</li><li>Cute couple art and other fun surprises.</li><li>Help in any way I can.</li><li>Hugs, kisses, cuddles, and affection.</li><li>Letting you be yourself around me.</li><li>Fun conversations and random topics.</li><li>Free art. :0</li></ul></section>
 
-    <section class="card wide" id="boundaries">
-      <h2>🚫 Don't</h2>
-      <ul>
-        <li>Don't use me.</li>
-        <li>Don't lie to me.</li>
-        <li>Don't leave without saying goodbye.</li>
-        <li>Don't ignore me on purpose.</li>
-        <li>Don't say sexual stuff to other people in front of me.</li>
-        <li>Don't compare me to other relationships.</li>
-        <li>Don't boss me around.</li>
-        <li>Don't guilt-trip me.</li>
-        <li>Don't act like you own me.</li>
-        <li>Don't throw me aside when someone else is there.</li>
-        <li>Don't ignore me when something doesn't go your way.</li>
-        <li>Don't treat me badly.</li>
-        <li>Don't hide stuff from me.</li>
-        <li>Don't be mean.</li>
-        <li>Don't hide things from me — be honest.</li>
-        <li>Don't hide it if you messed up. We'll figure it out together; just be honest.</li>
-        <li>Don't be a jerk because your day isn't going well.</li>
-        <li>Don't tell me how "hot" other people are. Fictional characters are okay.</li>
-        <li>Don't force love if you don't want it. I don't want forced feelings either.</li>
-        <li>Don't force me into things in general.</li>
-        <li>Don't leave me alone, please.</li>
-      </ul>
-    </section>
+      <section class="card" id="about"><h2>✨ <span>About Me</span></h2><ul><li>My favorite color is Electric Blue.</li><li>I'm fun, honest, and basically a big huggable bear.</li><li>I enjoy having time to myself, but I also like having people around (you &lt;3).</li><li>I love showers, especially sharing them with someone and helping wash their back.</li><li>I enjoy studying, reading, writing, and singing.</li><li>I love playing games like Fortnite, Marvel Rivals, Bayonetta, and LEGO games.</li><li>I love cuddling, spooning, or just laying in bed together doing absolutely nothing.</li><li>I like being around someone I can sit in comfortable silence with.</li><li>I love crystals and gemstones like amethysts, rubies, and sapphires.</li><li>I can read tarot cards.</li><li>I enjoy horror movies, psychological stories, and darker themes.</li><li>I love gothic aesthetics and monsters such as vampires and werewolves.</li><li>I enjoy toxic romance fiction and dark romance stories, including things like Hannibal.</li></ul></section>
 
-    <section class="card" id="fears">
-      <h2>🌙 Fears</h2>
-      <ul>
-        <li>Being alone.</li>
-        <li>The dark.</li>
-        <li>Sleeping alone.</li>
-        <li>Empty places.</li>
-        <li>Loud noises or chaotic environments.</li>
-        <li>Large crowds or a lot of people in one place.</li>
-        <li>Smelling bad. Bad smells and natural musk are completely different to me.</li>
-        <li>Being unclean.</li>
-        <li>Losing someone I hold dear.</li>
-      </ul>
-    </section>
+      <section class="card wide" id="boundaries"><h2>🚫 <span>Don't</span></h2><ul><li>Don't use me.</li><li>Don't lie to me.</li><li>Don't leave without saying goodbye.</li><li>Don't ignore me on purpose.</li><li>Don't say sexual stuff to other people in front of me.</li><li>Don't compare me to other relationships.</li><li>Don't boss me around.</li><li>Don't guilt-trip me.</li><li>Don't act like you own me.</li><li>Don't throw me aside when someone else is there.</li><li>Don't ignore me when something doesn't go your way.</li><li>Don't treat me badly.</li><li>Don't hide stuff from me.</li><li>Don't be mean.</li><li>Don't hide things from me — be honest.</li><li>Don't hide it if you messed up. We'll figure it out together; just be honest.</li><li>Don't be a jerk because your day isn't going well.</li><li>Don't tell me how "hot" other people are. Fictional characters are okay.</li><li>Don't force love if you don't want it. I don't want forced feelings either.</li><li>Don't force me into things in general.</li><li>Don't leave me alone, please.</li></ul></section>
 
-    <section class="card" id="preferences">
-      <h2>🔞 Private Preferences</h2>
-      <details>
-        <summary>Open private section</summary>
-        <ul>
-          <li>Musk.</li>
-          <li>Bite marks.</li>
-          <li>Being marked.</li>
-          <li>Being bitten.</li>
-          <li>Creampies.</li>
-          <li>Teasing.</li>
-          <li>Begging to be allowed to fuck you.</li>
-          <li>Making out for long times and kissing all over your body.</li>
-          <li>Telling you how well you're doing.</li>
-          <li>Musky boxers.</li>
-          <li>Face fucking / Oral.</li>
-          <li>Ass fucking / Anal.</li>
-          <li>Musky pits and ass.</li>
-          <li>Public teasing.</li>
-          <li>Licking you all over.</li>
-          <li>Mating press.</li>
-          <li>Multiple rounds.</li>
-          <li>Playing with your hole with my fingers.</li>
-          <li>Fucking rough like a doggie :3</li>
-          <li>Lifting you up and fucking you.</li>
-          <li>Thrusting into your ass.</li>
-          <li>Being locked. Idk, feels nice.</li>
-          <li>Making out with your ass after I fucked it and filled it up with my seed :]</li>
-        </ul>
-      </details>
-    </section>
+      <section class="card" id="fears"><h2>🌙 <span>Fears</span></h2><ul><li>Being alone.</li><li>The dark.</li><li>Sleeping alone.</li><li>Empty places.</li><li>Loud noises or chaotic environments.</li><li>Large crowds or a lot of people in one place.</li><li>Smelling bad. Bad smells and natural musk are completely different to me.</li><li>Being unclean.</li><li>Losing someone I hold dear.</li></ul></section>
 
-    <section class="card wide" id="mental">
-      <h2>🧠 Mental State</h2>
-      <ul>
-        <li>I deal with a lot mentally and emotionally.</li>
-        <li>I have trouble sleeping because I'm still afraid of the dark due to being treated badly in the dark by an abusive ex.</li>
-        <li>I carry trauma from losing a girlfriend to suicide and still struggle with the feelings that came from that experience.</li>
-        <li>Honesty means a lot to me, so please be truthful with me and don't lie to me.</li>
-        <li>I experience some symptoms that make me feel like people may have something against me or dislike me, though I know this isn't always the case.</li>
-        <li>I go through catatonic states and periods of social withdrawal, but I always do my best and try to be there for the people I care about.</li>
-        <li>I have ADHD, primarily hyperactive/impulsive type.</li>
-        <li>I am autistic and have some social difficulties.</li>
-        <li>I grew up in a very controlling environment, which has affected how I interact with people and the world around me.</li>
-      </ul>
-    </section>
+      <section class="card" id="preferences"><h2>🔞 <span>Private Preferences</span></h2><details><summary>Open private section</summary><ul><li>Musk.</li><li>Bite marks.</li><li>Being marked.</li><li>Being bitten.</li><li>Creampies.</li><li>Teasing.</li><li>Begging to be allowed to fuck you.</li><li>Making out for long times and kissing all over your body.</li><li>Telling you how well you're doing.</li><li>Musky boxers.</li><li>Face fucking / Oral.</li><li>Ass fucking / Anal.</li><li>Musky pits and ass.</li><li>Public teasing.</li><li>Licking you all over.</li><li>Mating press.</li><li>Multiple rounds.</li><li>Playing with your hole with my fingers.</li><li>Fucking rough like a doggie :3</li><li>Lifting you up and fucking you.</li><li>Thrusting into your ass.</li><li>Being locked. Idk, feels nice.</li><li>Making out with your ass after I fucked it and filled it up with my seed :]</li></ul></details></section>
 
-    <section class="card small" id="nicknames">
-      <h2>🐻 Nicknames</h2>
-      <ul>
-        <li>Best boy</li>
-        <li>Love</li>
-        <li>Honey</li>
-        <li>Sweetie</li>
-        <li>Cutie pie</li>
-        <li>Sugar flower</li>
-        <li>Doggie</li>
-        <li>Prince</li>
-        <li>Bear</li>
-        <li>Pup / Puppy</li>
-        <li>Metal</li>
-        <li>Mero</li>
-        <li>Mei Mei</li>
-        <li>Pillow</li>
-        <li>Heavy blanket</li>
-        <li>Rocket rider??? Idk</li>
-      </ul>
-    </section>
+      <section class="card wide" id="mental"><h2>🧠 <span>Mental State</span></h2><ul><li>I deal with a lot mentally and emotionally.</li><li>I have trouble sleeping because I'm still afraid of the dark due to being treated badly in the dark by an abusive ex.</li><li>I carry trauma from losing a girlfriend to suicide and still struggle with the feelings that came from that experience.</li><li>Honesty means a lot to me, so please be truthful with me and don't lie to me.</li><li>I experience some symptoms that make me feel like people may have something against me or dislike me, though I know this isn't always the case.</li><li>I go through catatonic states and periods of social withdrawal, but I always do my best and try to be there for the people I care about.</li><li>I have ADHD, primarily hyperactive/impulsive type.</li><li>I am autistic and have some social difficulties.</li><li>I grew up in a very controlling environment, which has affected how I interact with people and the world around me.</li></ul></section>
 
-    <section class="card small" id="turnoffs">
-      <h2>❌ Turn Offs</h2>
-      <ul>
-        <li>Piss or scat stuff.</li>
-        <li>Age play.</li>
-        <li>Rape stuff.</li>
-        <li>Actually hurting you, causing bruises, blue spots, or bleeding.</li>
-        <li>Bloodplay.</li>
-        <li>Inflation.</li>
-        <li>Furry feet / paws.</li>
-        <li>Rushing sex — I prefer taking my time and enjoying intimacy.</li>
-        <li>Only me giving or receiving all the time; I like switching things up.</li>
-        <li>Sharing you with other people because I prefer exclusivity.</li>
-        <li>Being mean or constantly using harsh/cuss words toward each other.</li>
-        <li>Choking.</li>
-        <li>Not you.</li>
-        <li>Non-consensual activities / lack of consent.</li>
-      </ul>
-    </section>
+      <section class="card small" id="nicknames"><h2>🐻 <span>Nicknames</span></h2><div class="chips"><span class="chip">Best boy</span><span class="chip">Love</span><span class="chip">Honey</span><span class="chip">Sweetie</span><span class="chip">Cutie pie</span><span class="chip">Sugar flower</span><span class="chip">Doggie</span><span class="chip">Prince</span><span class="chip">Bear</span><span class="chip">Pup / Puppy</span><span class="chip">Metal</span><span class="chip">Mero</span><span class="chip">Mei Mei</span><span class="chip">Pillow</span><span class="chip">Heavy blanket</span><span class="chip">Rocket rider??? Idk</span></div></section>
 
-    <section class="card small">
-      <h2>🔐 Private Note</h2>
-      <p>
-        This page is personal. If you're here, you're trusted.
-        Please treat this with kindness, honesty, and care.
-      </p>
-    </section>
+      <section class="card small" id="turnoffs"><h2>❌ <span>Turn Offs</span></h2><ul><li>Piss or scat stuff.</li><li>Age play.</li><li>Rape stuff.</li><li>Actually hurting you, causing bruises, blue spots, or bleeding.</li><li>Bloodplay.</li><li>Inflation.</li><li>Furry feet / paws.</li><li>Rushing sex — I prefer taking my time and enjoying intimacy.</li><li>Only me giving or receiving all the time; I like switching things up.</li><li>Sharing you with other people because I prefer exclusivity.</li><li>Being mean or constantly using harsh/cuss words toward each other.</li><li>Choking.</li><li>Not you.</li><li>Non-consensual activities / lack of consent.</li></ul></section>
 
+      <section class="card small"><h2>🔐 <span>Private Note</span></h2><p>This page is personal. If you're here, you're trusted. Please treat this with kindness, honesty, and care.</p></section>
+    </section>
   </main>
 
-  <footer>
-    Made with 💙 by Metal · Electric Blue Forever
-  </footer>
-
+  <footer>Made with 💙 by Metal · Electric Blue Forever</footer>
 </div>
 
 <script>
-const PASSWORD = "iloveyoumore";
+const PASSWORDS = ["iloveyoumore", ":iloveyoumore"];
+const lock = document.getElementById("lock");
+const site = document.getElementById("site");
+const passwordInput = document.getElementById("password");
+const error = document.getElementById("error");
+const form = document.getElementById("passwordForm");
+const toggle = document.getElementById("togglePassword");
 
-function cleanPassword(value){
-  return value
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "");
-}
+function cleanPassword(value){return String(value).trim().toLowerCase().replace(/\s+/g,"");}
+function showSite(){lock.classList.add("hidden");site.classList.remove("hidden");document.body.classList.remove("locked");sessionStorage.setItem("metalUnlocked","true");}
+function unlock(){const entered = cleanPassword(passwordInput.value);if(PASSWORDS.map(cleanPassword).includes(entered)){showSite();}else{error.textContent = "Wrong password. Try again 💙";passwordInput.value = "";passwordInput.focus();}}
 
-function unlock(){
-  const passwordInput = document.getElementById("password");
-  const error = document.getElementById("error");
-  const lock = document.getElementById("lock");
-  const site = document.getElementById("site");
-
-  const enteredPassword = cleanPassword(passwordInput.value);
-  const correctPassword = cleanPassword(PASSWORD);
-
-  if(enteredPassword === correctPassword){
-    lock.style.display = "none";
-    site.classList.remove("hidden");
-    sessionStorage.setItem("metalUnlocked","true");
-  }else{
-    error.textContent = "Wrong password. Try again 💙";
-    passwordInput.value = "";
-    passwordInput.focus();
-  }
-}
-
-document.getElementById("password").addEventListener("keydown", function(event){
-  if(event.key === "Enter"){
-    unlock();
-  }
-});
-
-window.addEventListener("load", function(){
-  const passwordInput = document.getElementById("password");
-
-  if(sessionStorage.getItem("metalUnlocked") === "true"){
-    document.getElementById("lock").style.display = "none";
-    document.getElementById("site").classList.remove("hidden");
-  }else{
-    passwordInput.focus();
-  }
-});
+form.addEventListener("submit", function(event){event.preventDefault();unlock();});
+toggle.addEventListener("click", function(){const isHidden = passwordInput.type === "password";passwordInput.type = isHidden ? "text" : "password";toggle.textContent = isHidden ? "🙈" : "👁️";toggle.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");passwordInput.focus();});
+window.addEventListener("load", function(){if(sessionStorage.getItem("metalUnlocked") === "true"){showSite();}else{passwordInput.focus();}});
 </script>
-
 </body>
 </html>
