@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,6 +40,67 @@ body{
   display:none !important;
 }
 
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size:44px 44px;
+  pointer-events:none;
+  z-index:-2;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:radial-gradient(white 1px, transparent 1px);
+  background-size:80px 80px;
+  opacity:.12;
+  animation:stars 35s linear infinite;
+  pointer-events:none;
+  z-index:-1;
+}
+
+@keyframes stars{
+  from{transform:translateY(0);}
+  to{transform:translateY(80px);}
+}
+
+.orb{
+  position:fixed;
+  width:260px;
+  height:260px;
+  border-radius:50%;
+  filter:blur(45px);
+  pointer-events:none;
+  opacity:.75;
+  animation:float 7s ease-in-out infinite alternate;
+  z-index:-1;
+}
+
+.orb.one{
+  top:10%;
+  left:-90px;
+  background:rgba(57,200,255,.22);
+}
+
+.orb.two{
+  right:-90px;
+  bottom:8%;
+  background:rgba(155,92,255,.2);
+  animation-delay:1s;
+}
+
+@keyframes float{
+  from{transform:translateY(0) scale(1);}
+  to{transform:translateY(-35px) scale(1.08);}
+}
+
+/* PASSWORD SCREEN */
+
 .lock{
   position:fixed;
   inset:0;
@@ -48,7 +108,8 @@ body{
   display:grid;
   place-items:center;
   padding:20px;
-  background:rgba(2,4,10,.95);
+  background:rgba(2,4,10,.96);
+  backdrop-filter:blur(20px);
 }
 
 .lock-box{
@@ -71,6 +132,12 @@ body{
   font-size:2.8rem;
   background:linear-gradient(135deg,var(--blue),var(--purple));
   box-shadow:0 0 40px rgba(57,200,255,.5);
+  animation:pulse 4s ease-in-out infinite;
+}
+
+@keyframes pulse{
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.08);}
 }
 
 .lock-box h1{
@@ -96,6 +163,11 @@ input{
   outline:none;
 }
 
+input:focus{
+  border-color:rgba(57,200,255,.7);
+  box-shadow:0 0 0 4px rgba(57,200,255,.12);
+}
+
 button{
   width:100%;
   margin-top:14px;
@@ -107,6 +179,12 @@ button{
   color:#00111d;
   background:linear-gradient(135deg,var(--blue),var(--blue2));
   box-shadow:0 0 28px rgba(57,200,255,.35);
+  transition:.25s ease;
+}
+
+button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 0 38px rgba(57,200,255,.55);
 }
 
 .error{
@@ -114,6 +192,8 @@ button{
   color:#ff7aa7;
   min-height:22px;
 }
+
+/* MAIN SITE */
 
 .wrapper{
   width:min(1180px,100%);
@@ -142,10 +222,28 @@ button{
 .hero-card{
   padding:46px;
   border-radius:40px;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at top left,rgba(57,200,255,.22),transparent 38%),
+    radial-gradient(circle at bottom right,rgba(155,92,255,.18),transparent 40%);
+  pointer-events:none;
+}
+
+.hero-card > *{
+  position:relative;
+  z-index:1;
 }
 
 .badge{
   display:inline-block;
+  max-width:100%;
   padding:9px 15px;
   margin-bottom:18px;
   border-radius:999px;
@@ -153,6 +251,7 @@ button{
   border:1px solid rgba(57,200,255,.34);
   color:var(--blue);
   font-weight:800;
+  font-size:.9rem;
 }
 
 h1{
@@ -184,6 +283,13 @@ h1{
   border-radius:999px;
   background:rgba(255,255,255,.09);
   border:1px solid var(--line);
+  transition:.25s ease;
+}
+
+.hero-buttons a:hover{
+  transform:translateY(-2px);
+  background:rgba(57,200,255,.16);
+  color:var(--blue);
 }
 
 .hero-buttons a:first-child{
@@ -206,13 +312,17 @@ h1{
   display:grid;
   place-items:center;
   font-size:4.6rem;
-  background:linear-gradient(135deg,var(--blue),var(--purple));
+  background:
+    radial-gradient(circle,rgba(255,255,255,.26),transparent 55%),
+    linear-gradient(135deg,var(--blue),var(--purple));
   box-shadow:0 0 55px rgba(57,200,255,.55);
+  animation:pulse 4s infinite ease-in-out;
 }
 
 .profile-card h2{
   color:var(--blue);
   font-size:2rem;
+  text-shadow:0 0 15px rgba(57,200,255,.45);
 }
 
 .profile-card p{
@@ -238,6 +348,7 @@ h1{
 .stat strong{
   display:block;
   color:var(--blue);
+  margin-bottom:4px;
 }
 
 .nav{
@@ -250,14 +361,23 @@ h1{
   border-radius:26px;
   background:rgba(3,7,19,.62);
   border:1px solid var(--line);
+  backdrop-filter:blur(18px);
 }
 
 .nav a{
+  white-space:nowrap;
   color:white;
   text-decoration:none;
   padding:10px 14px;
   border-radius:999px;
   background:rgba(255,255,255,.07);
+  transition:.25s ease;
+}
+
+.nav a:hover{
+  color:var(--blue);
+  background:rgba(57,200,255,.16);
+  transform:translateY(-2px);
 }
 
 .grid{
@@ -270,6 +390,10 @@ h1{
   grid-column:span 6;
   border-radius:34px;
   padding:30px;
+  position:relative;
+  overflow:hidden;
+  transition:.35s ease;
+  border:1px solid rgba(57,200,255,.16);
 }
 
 .card.wide{
@@ -278,6 +402,29 @@ h1{
 
 .card.small{
   grid-column:span 4;
+}
+
+.card:hover{
+  transform:translateY(-8px);
+  border-color:rgba(57,200,255,.48);
+  box-shadow:
+    0 25px 60px rgba(0,0,0,.38),
+    0 0 34px rgba(57,200,255,.18);
+}
+
+.card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at top left,rgba(57,200,255,.16),transparent 40%),
+    linear-gradient(135deg,rgba(57,200,255,.08),transparent 45%);
+  pointer-events:none;
+}
+
+.card > *{
+  position:relative;
+  z-index:1;
 }
 
 .card h2{
@@ -306,6 +453,20 @@ li{
   text-align:center;
   font-weight:900;
   color:white!important;
+  line-height:1.4;
+}
+
+details{
+  position:relative;
+  z-index:2;
+}
+
+summary{
+  cursor:pointer;
+  color:var(--blue);
+  font-weight:900;
+  font-size:1.15rem;
+  margin-bottom:15px;
 }
 
 footer{
@@ -321,15 +482,21 @@ footer{
 
   .hero{
     min-height:auto;
+    padding:28px 0;
     grid-template-columns:1fr;
   }
 
   .hero-card{
     padding:32px 24px;
+    border-radius:32px;
   }
 
   h1{
     letter-spacing:-3px;
+  }
+
+  .profile-card{
+    border-radius:32px;
   }
 
   .card,
@@ -346,21 +513,38 @@ footer{
     justify-content:flex-start;
     flex-wrap:nowrap;
     overflow-x:auto;
+    padding:10px;
+  }
+}
+
+@media(max-width:700px){
+  .hero-card{
+    text-align:center;
+  }
+
+  .badge{
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .hero-buttons{
+    justify-content:center;
+  }
+
+  .hero-buttons a{
+    width:100%;
+    text-align:center;
+  }
+
+  .card{
+    padding:24px;
   }
 }
 
 @media(max-width:480px){
   .lock-box{
     padding:26px 20px;
-  }
-
-  .hero-card{
-    text-align:center;
-  }
-
-  .hero-buttons a{
-    width:100%;
-    text-align:center;
+    border-radius:26px;
   }
 
   .avatar{
@@ -375,12 +559,16 @@ footer{
 
   .card{
     padding:22px;
+    border-radius:26px;
   }
 }
 </style>
 </head>
 
 <body>
+
+<div class="orb one"></div>
+<div class="orb two"></div>
 
 <div class="lock" id="lock">
   <div class="lock-box">
@@ -400,27 +588,30 @@ footer{
   <section class="hero">
     <div class="hero-card">
       <div class="badge">electric blue · gothic · soft heart</div>
+
       <h1>Metal</h1>
 
       <p>
-        A big huggable bear with a soft heart, dark-romance taste, electric-blue energy,
-        and a love for honesty, affection, games, crystals, cuddles, and deep connection.
+        A big huggable bear with a soft heart, electric-blue energy,
+        gothic taste, deep feelings, and a love for honesty, affection,
+        games, crystals, cuddles, and real connection.
       </p>
 
       <div class="hero-buttons">
         <a href="#about">Read About Me</a>
         <a href="#boundaries">Boundaries</a>
-        <a href="#nicknames">Nicknames</a>
+        <a href="#preferences">Private Preferences</a>
       </div>
     </div>
 
     <div class="profile-card">
       <div class="avatar">💙</div>
+
       <h2>Best Boy Energy</h2>
 
       <p>
-        Sweet, loyal, clingy in a cute way, protective of feelings,
-        and happiest with honest love.
+        Sweet, loyal, affectionate, honest, protective of feelings,
+        and happiest with safe, honest love.
       </p>
 
       <div class="stats">
@@ -436,6 +627,7 @@ footer{
     <a href="#about">About</a>
     <a href="#boundaries">Don't</a>
     <a href="#fears">Fears</a>
+    <a href="#preferences">Private</a>
     <a href="#mental">Mental</a>
     <a href="#nicknames">Nicknames</a>
     <a href="#turnoffs">Turn Offs</a>
@@ -444,16 +636,18 @@ footer{
   <main class="grid">
 
     <section class="card wide">
-      <p class="quote">“Be honest with me, stay gentle with me, and let me love you fully.”</p>
+      <p class="quote">
+        “Be honest with me, stay gentle with me, and let me love you fully.”
+      </p>
     </section>
 
     <section class="card" id="offer">
       <h2>💙 What I Can Offer</h2>
       <ul>
         <li>Unending love.</li>
-        <li>Daily texts and calls at least once a week.</li>
+        <li>Texts every day and calls at least once a week.</li>
         <li>Support whenever you need it.</li>
-        <li>Cute couple art and fun surprises.</li>
+        <li>Cute couple art and other fun surprises.</li>
         <li>Help in any way I can.</li>
         <li>Hugs, kisses, cuddles, and affection.</li>
         <li>Letting you be yourself around me.</li>
@@ -467,28 +661,44 @@ footer{
       <ul>
         <li>My favorite color is Electric Blue.</li>
         <li>I'm fun, honest, and basically a big huggable bear.</li>
-        <li>I enjoy alone time, but I also like having my person around.</li>
+        <li>I enjoy having time to myself, but I also like having people around (you &lt;3).</li>
+        <li>I love showers, especially sharing them with someone and helping wash their back.</li>
         <li>I enjoy studying, reading, writing, and singing.</li>
-        <li>I love Fortnite, Marvel Rivals, Bayonetta, and LEGO games.</li>
-        <li>I love cuddling, spooning, and doing absolutely nothing together.</li>
-        <li>I love crystals, gemstones, and tarot cards.</li>
-        <li>I enjoy horror, psychological stories, gothic aesthetics, vampires, and werewolves.</li>
+        <li>I love playing games like Fortnite, Marvel Rivals, Bayonetta, and LEGO games.</li>
+        <li>I love cuddling, spooning, or just laying in bed together doing absolutely nothing.</li>
+        <li>I like being around someone I can sit in comfortable silence with.</li>
+        <li>I love crystals and gemstones like amethysts, rubies, and sapphires.</li>
+        <li>I can read tarot cards.</li>
+        <li>I enjoy horror movies, psychological stories, and darker themes.</li>
+        <li>I love gothic aesthetics and monsters such as vampires and werewolves.</li>
+        <li>I enjoy toxic romance fiction and dark romance stories, including things like Hannibal.</li>
       </ul>
     </section>
 
-    <section class="card" id="boundaries">
-      <h2>🚫 Please Don't</h2>
+    <section class="card wide" id="boundaries">
+      <h2>🚫 Don't</h2>
       <ul>
         <li>Don't use me.</li>
         <li>Don't lie to me.</li>
         <li>Don't leave without saying goodbye.</li>
         <li>Don't ignore me on purpose.</li>
+        <li>Don't say sexual stuff to other people in front of me.</li>
         <li>Don't compare me to other relationships.</li>
-        <li>Don't boss me around or guilt-trip me.</li>
+        <li>Don't boss me around.</li>
+        <li>Don't guilt-trip me.</li>
         <li>Don't act like you own me.</li>
         <li>Don't throw me aside when someone else is there.</li>
+        <li>Don't ignore me when something doesn't go your way.</li>
+        <li>Don't treat me badly.</li>
+        <li>Don't hide stuff from me.</li>
+        <li>Don't be mean.</li>
         <li>Don't hide things from me — be honest.</li>
-        <li>Don't force love or force me into things.</li>
+        <li>Don't hide it if you messed up. We'll figure it out together; just be honest.</li>
+        <li>Don't be a jerk because your day isn't going well.</li>
+        <li>Don't tell me how "hot" other people are. Fictional characters are okay.</li>
+        <li>Don't force love if you don't want it. I don't want forced feelings either.</li>
+        <li>Don't force me into things in general.</li>
+        <li>Don't leave me alone, please.</li>
       </ul>
     </section>
 
@@ -500,23 +710,57 @@ footer{
         <li>Sleeping alone.</li>
         <li>Empty places.</li>
         <li>Loud noises or chaotic environments.</li>
-        <li>Large crowds.</li>
+        <li>Large crowds or a lot of people in one place.</li>
+        <li>Smelling bad. Bad smells and natural musk are completely different to me.</li>
         <li>Being unclean.</li>
         <li>Losing someone I hold dear.</li>
       </ul>
+    </section>
+
+    <section class="card" id="preferences">
+      <h2>🔞 Private Preferences</h2>
+      <details>
+        <summary>Open private section</summary>
+        <ul>
+          <li>Musk.</li>
+          <li>Bite marks.</li>
+          <li>Being marked.</li>
+          <li>Being bitten.</li>
+          <li>Creampies.</li>
+          <li>Teasing.</li>
+          <li>Begging to be allowed to fuck you.</li>
+          <li>Making out for long times and kissing all over your body.</li>
+          <li>Telling you how well you're doing.</li>
+          <li>Musky boxers.</li>
+          <li>Face fucking / Oral.</li>
+          <li>Ass fucking / Anal.</li>
+          <li>Musky pits and ass.</li>
+          <li>Public teasing.</li>
+          <li>Licking you all over.</li>
+          <li>Mating press.</li>
+          <li>Multiple rounds.</li>
+          <li>Playing with your hole with my fingers.</li>
+          <li>Fucking rough like a doggie :3</li>
+          <li>Lifting you up and fucking you.</li>
+          <li>Thrusting into your ass.</li>
+          <li>Being locked. Idk, feels nice.</li>
+          <li>Making out with your ass after I fucked it and filled it up with my seed :]</li>
+        </ul>
+      </details>
     </section>
 
     <section class="card wide" id="mental">
       <h2>🧠 Mental State</h2>
       <ul>
         <li>I deal with a lot mentally and emotionally.</li>
-        <li>I have trouble sleeping sometimes because of past trauma.</li>
-        <li>Honesty means a lot to me, so please be truthful.</li>
-        <li>I sometimes feel like people dislike me, even when that may not be true.</li>
-        <li>I go through catatonic states and periods of social withdrawal.</li>
+        <li>I have trouble sleeping because I'm still afraid of the dark due to being treated badly in the dark by an abusive ex.</li>
+        <li>I carry trauma from losing a girlfriend to suicide and still struggle with the feelings that came from that experience.</li>
+        <li>Honesty means a lot to me, so please be truthful with me and don't lie to me.</li>
+        <li>I experience some symptoms that make me feel like people may have something against me or dislike me, though I know this isn't always the case.</li>
+        <li>I go through catatonic states and periods of social withdrawal, but I always do my best and try to be there for the people I care about.</li>
         <li>I have ADHD, primarily hyperactive/impulsive type.</li>
         <li>I am autistic and have some social difficulties.</li>
-        <li>I grew up in a controlling environment, which affected how I interact with the world.</li>
+        <li>I grew up in a very controlling environment, which has affected how I interact with people and the world around me.</li>
       </ul>
     </section>
 
@@ -528,25 +772,37 @@ footer{
         <li>Honey</li>
         <li>Sweetie</li>
         <li>Cutie pie</li>
+        <li>Sugar flower</li>
+        <li>Doggie</li>
         <li>Prince</li>
         <li>Bear</li>
         <li>Pup / Puppy</li>
         <li>Metal</li>
         <li>Mero</li>
         <li>Mei Mei</li>
+        <li>Pillow</li>
+        <li>Heavy blanket</li>
+        <li>Rocket rider??? Idk</li>
       </ul>
     </section>
 
     <section class="card small" id="turnoffs">
       <h2>❌ Turn Offs</h2>
       <ul>
-        <li>Non-consensual activities.</li>
-        <li>Actually hurting someone.</li>
-        <li>Being rushed.</li>
-        <li>Dishonesty.</li>
-        <li>Being mean constantly.</li>
-        <li>Lack of communication.</li>
-        <li>Sharing with others.</li>
+        <li>Piss or scat stuff.</li>
+        <li>Age play.</li>
+        <li>Rape stuff.</li>
+        <li>Actually hurting you, causing bruises, blue spots, or bleeding.</li>
+        <li>Bloodplay.</li>
+        <li>Inflation.</li>
+        <li>Furry feet / paws.</li>
+        <li>Rushing sex — I prefer taking my time and enjoying intimacy.</li>
+        <li>Only me giving or receiving all the time; I like switching things up.</li>
+        <li>Sharing you with other people because I prefer exclusivity.</li>
+        <li>Being mean or constantly using harsh/cuss words toward each other.</li>
+        <li>Choking.</li>
+        <li>Not you.</li>
+        <li>Non-consensual activities / lack of consent.</li>
       </ul>
     </section>
 
@@ -604,15 +860,15 @@ document.getElementById("password").addEventListener("keydown", function(event){
 
 window.addEventListener("load", function(){
   const passwordInput = document.getElementById("password");
-  passwordInput.focus();
 
   if(sessionStorage.getItem("metalUnlocked") === "true"){
     document.getElementById("lock").style.display = "none";
     document.getElementById("site").classList.remove("hidden");
+  }else{
+    passwordInput.focus();
   }
 });
 </script>
 
 </body>
 </html>
-```
